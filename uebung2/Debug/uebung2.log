@@ -1,3 +1,0 @@
-﻿  main.cpp
-c:\users\alex\dropbox\workspaces\vs workspace\cg1_ue3\uebung2\shader.h(73): warning C4244: "Initialisierung": Konvertierung von "std::streamoff" in "int", möglicher Datenverlust
-  uebung2.vcxproj -> C:\Users\Alex\Dropbox\Workspaces\VS Workspace\CG1_UE3\Debug\uebung2.exe
