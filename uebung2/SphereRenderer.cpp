@@ -26,15 +26,15 @@ SphereRenderer::~SphereRenderer()
 {
 }
 
-void SphereRenderer::render(Sphere * sphere)
+void SphereRenderer::render(Sphere* sphere)
 {
-	// once/frame
+	// once per frame
 	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram(shader);
 	glm::mat4 viewprojection = camera->getProjectionViewMatrix();
 
-	// once/sphere
+	// once per sphere per frame
 	modelviewprojection = viewprojection * sphere->getModelMatrix();
 
 	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(modelviewprojection));
@@ -61,6 +61,7 @@ inline void SphereRenderer::push_indices(GLuint * indices, int index, int sector
 
 void SphereRenderer::fillSphereArray(GLfloat * interleaved, GLuint * indices, float radius)
 {
+	std::cout << "Creating Sphere vertices" << std::endl;
 	float const R = 1. / (float)(rings - 1);
 	float const S = 1. / (float)(sectors - 1);
 
@@ -96,14 +97,14 @@ void SphereRenderer::fillSphereArray(GLfloat * interleaved, GLuint * indices, fl
 
 void SphereRenderer::init(GLuint shaderProgram)
 {
-	std::cout << "intitalizing SphereRenderer" << std::endl;
+	std::cout << "Initializing SphereRenderer" << std::endl;
 	shader = shaderProgram;
 	mvpLocation = glGetUniformLocation(shaderProgram, "MVP");
 	fillSphereArray(vertices, indices, 1.0f);
 	generateBuffers();
 }
 
-void SphereRenderer::setCamera(UserCamera * newCamera)
+void SphereRenderer::setCamera(UserCamera* newCamera)
 {
 	camera = newCamera;
 }

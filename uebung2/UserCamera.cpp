@@ -5,6 +5,8 @@ static const glm::vec3 originalRight = glm::vec3(1.0f, 0.0f, 0.0f);
 
 UserCamera::UserCamera()
 {
+	this->position = glm::vec3(0.0f, 0.0f, 0.0f);
+	this->rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 
 
@@ -34,6 +36,7 @@ void UserCamera::yaw(float amount)
 
 glm::mat4 UserCamera::getProjectionViewMatrix()
 {
+	std::cout << (int)this->position.x << " " << (int)this->position.y << " " << (int)this->position.z << std::endl;
 	glm::mat4 view = glm::rotate(glm::mat4(1.0f), this->rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
 	view = glm::rotate(view, this->rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
 	view = glm::translate(view, this->position);
@@ -41,7 +44,8 @@ glm::mat4 UserCamera::getProjectionViewMatrix()
 		this->fieldOfView, 
 		this->aspectRatio, 
 		this->nearClippingPlane, 
-		this->farClippingPlane);
+		this->farClippingPlane
+	);
 	return proj * view;
 }
 

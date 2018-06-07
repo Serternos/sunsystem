@@ -1,6 +1,9 @@
 .vs/*
 uebung2.sln
 Debug/*
+x64/*
+*.dll
+uebung2/x64/*
 uebung2/uebung2.vcxproj
 uebung2/uebung2.vcxproj.filters
 uebung2/uebung2.vcxproj.user

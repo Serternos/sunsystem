@@ -110,19 +110,17 @@ void keyboardFunction(unsigned char key, int mousex, int mousey)
 }
 
 void passiveMotionFunction(int x, int y) {
-	static int lastMouseX = 0;
-	static int lastMouseY = 0;
+	static int lastMouseX = width / 2;
+	static int lastMouseY = height / 2;
 
 	int deltaX = lastMouseX - x;
 	int deltaY = lastMouseY - y;
 
-	std::cout << "dx: " << deltaX << " dy: " << deltaY << std::endl;
-
 	lastMouseX = x;
 	lastMouseY = y;
 
-	camera->yaw((float)deltaX / 100.0f);
-	camera->pitch((float)deltaY / 100.0f);
+	camera->yaw((float)deltaX / 500.0f);
+	camera->pitch((float)deltaY / 500.0f);
 }
 
 /// <summary>
