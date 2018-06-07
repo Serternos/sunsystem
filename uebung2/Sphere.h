@@ -15,14 +15,12 @@ public:
 
 	//PLUS TEXTURE-->LATER
 	float radius;
-
 	std::vector<Sphere*> children;
-
 	glm::vec4 color;
-
 	glm::vec3 rotation;
-
 	glm::vec3 translation;
+
+	glm::mat4 getModelMatrix();
 };
 
 #endif // _SPHERE_H

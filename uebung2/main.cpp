@@ -4,7 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "VAOFactory.h"
+#include "SphereRenderer.h"
 #include "shader.h"
 #include "Sphere.h"
 
@@ -12,7 +12,11 @@
 GLuint colorLocation, mvpLocation;
 
 //Kugeln
-Sphere* kugelEins;
+Sphere* sonne;
+Sphere* erde;
+
+//Kamera
+UserCamera* camera;
 
 // Breite und Höhe des Fensters
 const int width = 800;
@@ -31,11 +35,24 @@ void init()
 	glDepthFunc(GL_LESS);
 
 	// Initialisiert den Standardshader aus shader.h
-	VAOFactory::init(initShader());
+	SphereRenderer::init(initShader());
 
 	//GENERATE SPHERE HERE
-	kugelEins = new Sphere(2.0f);
+	sonne = new Sphere(2.0f);
+	erde = new Sphere(1.0f);
 	//GENERATE SPHERE HERE
+
+	//GENERATE CAMERA HERE
+	camera = new UserCamera();
+	camera->aspectRatio = ((float)width /(float) height);
+	camera->farClippingPlane = 100.0f;
+	camera->nearClippingPlane = 1.0f;
+	camera->fieldOfView = glm::radians(29.0f);
+
+	camera->moveAhead(-10.0f);
+
+	SphereRenderer::setCamera(camera);
+	//GENERATE CAMERA HERE
 }
 
 /// <summary>
@@ -46,7 +63,7 @@ void render()
 
 
 	//RENDER HERE
-	VAOFactory::render(kugelEins);
+	SphereRenderer::render(sonne);
 	//RENDER HERE
 
 	// Buffer wechseln (double buffering, wegen GLUT_DOUBLE in der glutInitDisplayMode(..) Funktion)
@@ -62,7 +79,70 @@ void render()
 /// <param name="mousey"></param>
 void keyboardFunction(unsigned char key, int mousex, int mousey)
 {
+	switch (key) {
+		case 'a':
+			camera->moveSideways(-0.01f);
+			break;
+		case 'd':
+			camera->moveSideways(-0.01f);
+			break;
+		case 'w':
+			camera->moveAhead(0.01f);
+			break;
+		case 's':
+			camera->moveAhead(-0.01f);
+			break;
+		case 'r':
+			camera->farClippingPlane += 5.0f;
+			break;
+		case 'f':
+			camera->farClippingPlane -= 5.0f;
+			break;
+		case 't':
+			camera->nearClippingPlane += 0.5f;
+			break;
+		case 'g':
+			camera->nearClippingPlane -= 0.5f;
+			break;
+		case '+':
+			camera->fieldOfView -= glm::radians(1.0f);
+			break;
+		case '-':
+			camera->fieldOfView += glm::radians(1.0f);
+			break;
+		default:
+			break;
+	}
+	if (key == 'a') {
+		camera->moveSideways(-0.01f);
+	}
+	if (key == 'd') {
+		camera->moveSideways(0.01f);
+	}
 
+	if (key == 'w') {
+		camera->moveAhead(0.01f);
+	}
+
+	if (key == 's') {
+		camera->moveAhead(-0.01f);
+	}
+
+}
+
+void passiveMotionFunction(int x, int y) {
+
+	static int lastMouseX = width / 2;
+	static int lastMouseY = height / 2;
+
+	int deltaX = lastMouseX - x;
+	int deltaY = lastMouseY - y;
+
+	lastMouseX = x;
+	lastMouseY = y;
+
+	camera->yaw((float)deltaX / 300.0f);
+	camera->pitch((float)deltaY / 300.0f);
 }
 
 /// <summary>
@@ -83,6 +163,7 @@ int main(int argc, char **argv)
 	glutCreateWindow("Aufgabe 02 - Computergrafik I");
 	glutDisplayFunc(render);
 	glutKeyboardFunc(keyboardFunction);
+	glutPassiveMotionFunc(passiveMotionFunction);
 	glutIdleFunc(idleFunction);
 	glewInit();
 	init();

@@ -132,12 +132,14 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Sphere.cpp" />
-    <ClCompile Include="VAOFactory.cpp" />
+    <ClCompile Include="SphereRenderer.cpp" />
+    <ClCompile Include="UserCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="shader.h" />
     <ClInclude Include="Sphere.h" />
-    <ClInclude Include="VAOFactory.h" />
+    <ClInclude Include="SphereRenderer.h" />
+    <ClInclude Include="UserCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\freeglut-MSVC-3.0.0-2.mp\freeglut\bin\freeglut.dll" />

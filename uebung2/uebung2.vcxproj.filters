@@ -21,7 +21,10 @@
     <ClInclude Include="Sphere.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="VAOFactory.h">
+    <ClInclude Include="SphereRenderer.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="UserCamera.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
@@ -42,7 +45,10 @@
     <ClCompile Include="Sphere.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="VAOFactory.cpp">
+    <ClCompile Include="SphereRenderer.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="UserCamera.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
