@@ -96,7 +96,7 @@ void SphereRenderer::fillSphereArray(GLfloat * interleaved, GLuint * indices, fl
 
 void SphereRenderer::init(GLuint shaderProgram)
 {
-	std::cout << "intitalizing VAOFactory" << std::endl;
+	std::cout << "intitalizing SphereRenderer" << std::endl;
 	shader = shaderProgram;
 	mvpLocation = glGetUniformLocation(shaderProgram, "MVP");
 	fillSphereArray(vertices, indices, 1.0f);

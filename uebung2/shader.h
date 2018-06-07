@@ -2,8 +2,10 @@
 #define _SHADER_
 
 #include <GL/glew.h>
+#include <string>
 #include <iostream>
 #include <fstream>
+#include <ctype.h>
 
 std::string vertexFileName = "vertex.shader";
 std::string fragmentFileName = "fragment.shader";
@@ -12,6 +14,8 @@ GLchar* readShaderFile(std::string fileName);
 
 GLuint initShader()
 {
+
+	std::cout << "loading shaders\n" << std::endl;
 	GLuint shaderProgram;
 
 	GLchar* vShaderCode;
@@ -24,7 +28,6 @@ GLuint initShader()
 
 	vertex = glCreateShader(GL_VERTEX_SHADER);
 	vShaderCode = readShaderFile(vertexFileName);
-	std::cout << vShaderCode << std::endl;
 	glShaderSource(vertex, 1, &vShaderCode, NULL);
 	glCompileShader(vertex);
 
@@ -69,15 +72,15 @@ GLuint initShader()
 }
 
 GLchar* readShaderFile(std::string fileName) {
-	std::ifstream shaderStream(fileName.c_str(), std::ifstream::ate);
-	int len = shaderStream.tellg();
-	GLchar* shaderSource = new GLchar[len + 1];
-	shaderStream.clear();
-	shaderStream.seekg(0, shaderStream.beg);
-	for (int i = 0; i<len; i++) { shaderStream.get(shaderSource[i]); }
-	shaderSource[len] = '\0';
+	std::ifstream inputStream(fileName.c_str(), std::ifstream::ate);
+	int len = inputStream.tellg();
+	inputStream.clear();
+	inputStream.seekg(0, inputStream.beg);
 
-	return shaderSource;
+	std::string* buf = new std::string(std::istreambuf_iterator<char>(inputStream), {});
+	buf->push_back('\0');
+	std::cout << (buf->c_str()) << std::endl << std::endl;
+	return (GLchar*)(buf->c_str());
 }
 
 #endif // ! _SHADER_

@@ -19,8 +19,8 @@ Sphere* erde;
 UserCamera* camera;
 
 // Breite und Höhe des Fensters
-const int width = 800;
-const int height = 600;
+const int width = 1024;
+const int height = 768;
 
 /// <summary>
 /// Initialisiert den Viewport, Shader und Vertexdaten
@@ -71,12 +71,6 @@ void render()
 }
 
 
-/// <summary>
-/// Funktion für die Tastatureingaben
-/// </summary>
-/// <param name="key"></param>
-/// <param name="mousex"></param>
-/// <param name="mousey"></param>
 void keyboardFunction(unsigned char key, int mousex, int mousey)
 {
 	switch (key) {
@@ -113,36 +107,22 @@ void keyboardFunction(unsigned char key, int mousex, int mousey)
 		default:
 			break;
 	}
-	if (key == 'a') {
-		camera->moveSideways(-0.01f);
-	}
-	if (key == 'd') {
-		camera->moveSideways(0.01f);
-	}
-
-	if (key == 'w') {
-		camera->moveAhead(0.01f);
-	}
-
-	if (key == 's') {
-		camera->moveAhead(-0.01f);
-	}
-
 }
 
 void passiveMotionFunction(int x, int y) {
-
-	static int lastMouseX = width / 2;
-	static int lastMouseY = height / 2;
+	static int lastMouseX = 0;
+	static int lastMouseY = 0;
 
 	int deltaX = lastMouseX - x;
 	int deltaY = lastMouseY - y;
 
+	std::cout << "dx: " << deltaX << " dy: " << deltaY << std::endl;
+
 	lastMouseX = x;
 	lastMouseY = y;
 
-	camera->yaw((float)deltaX / 300.0f);
-	camera->pitch((float)deltaY / 300.0f);
+	camera->yaw((float)deltaX / 100.0f);
+	camera->pitch((float)deltaY / 100.0f);
 }
 
 /// <summary>
@@ -158,9 +138,9 @@ int main(int argc, char **argv)
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-	glutInitWindowPosition(100, 100);
+	glutInitWindowPosition(250, 250);
 	glutInitWindowSize(width, height);
-	glutCreateWindow("Aufgabe 02 - Computergrafik I");
+	glutCreateWindow("Aufgabe 03 - Computergrafik I");
 	glutDisplayFunc(render);
 	glutKeyboardFunc(keyboardFunction);
 	glutPassiveMotionFunc(passiveMotionFunction);
