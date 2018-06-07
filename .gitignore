@@ -1,7 +1,10 @@
-.vs
+.vs/*
 uebung2.sln
 Debug/*
 uebung2/uebung2.vcxproj
 uebung2/uebung2.vcxproj.filters
 uebung2/uebung2.vcxproj.user
 uebung2/Debug/*
+ipch/*
+uebung2.VC.db
+uebung2.VC.VC.opendb
