@@ -38,8 +38,8 @@ void init()
 	SphereRenderer::init(initShader());
 
 	//GENERATE SPHERE HERE
-	sonne = new Sphere(2.0f);
-	erde = new Sphere(1.0f);
+	sonne = new Sphere(2.0f, 0.0f, 0.0f, 0.0f);
+	erde = new Sphere(1.0f, 0.0f, 0.0f, 0.0f);
 	//GENERATE SPHERE HERE
 
 	//GENERATE CAMERA HERE

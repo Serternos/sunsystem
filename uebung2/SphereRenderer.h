@@ -25,7 +25,7 @@ public:
 
 private:
 	static inline void push_indices(GLuint* indices, int index, int sectors, int r, int s);
-	static void fillSphereArray(GLfloat* interleaved, GLuint* indices, float radius);
+	static void fillSphereArray(GLfloat* interleaved, GLuint* indices);
 
 	static void generateBuffers();
 };

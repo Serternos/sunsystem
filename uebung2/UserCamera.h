@@ -18,8 +18,8 @@ public:
 	float farClippingPlane;
 	float aspectRatio;
 
-	void moveAhead(float direction);
-	void moveSideways(float directon);
+	void moveAhead(float amount);
+	void moveSideways(float amount);
 
 	void pitch( float amount);
 	void yaw(float amount);

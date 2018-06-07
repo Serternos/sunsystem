@@ -59,7 +59,7 @@ inline void SphereRenderer::push_indices(GLuint * indices, int index, int sector
 	indices[index + 5] = curRow + nextS;
 }
 
-void SphereRenderer::fillSphereArray(GLfloat * interleaved, GLuint * indices, float radius)
+void SphereRenderer::fillSphereArray(GLfloat * interleaved, GLuint * indices)
 {
 	std::cout << "Creating Sphere vertices" << std::endl;
 	float const R = 1. / (float)(rings - 1);
@@ -74,9 +74,9 @@ void SphereRenderer::fillSphereArray(GLfloat * interleaved, GLuint * indices, fl
 			float const x = cos(2 * M_PI * s * S) * sin(M_PI * r * R);
 			float const z = sin(2 * M_PI * s * S) * sin(M_PI * r * R);
 
-			interleaved[index] = x * radius; //Position
-			interleaved[index + 1] = y * radius;
-			interleaved[index + 2] = z * radius;
+			interleaved[index] = x; //Position
+			interleaved[index + 1] = y;
+			interleaved[index + 2] = z;
 
 			interleaved[index + 3] = x; //Normals
 			interleaved[index + 4] = y;
@@ -100,10 +100,14 @@ void SphereRenderer::init(GLuint shaderProgram)
 	std::cout << "Initializing SphereRenderer" << std::endl;
 	shader = shaderProgram;
 	mvpLocation = glGetUniformLocation(shaderProgram, "MVP");
-	fillSphereArray(vertices, indices, 1.0f);
+	fillSphereArray(vertices, indices);
 	generateBuffers();
 }
 
+
+///<summary>
+/// Set the camera from which to get the projection and view matrix
+///</summary>
 void SphereRenderer::setCamera(UserCamera* newCamera)
 {
 	camera = newCamera;

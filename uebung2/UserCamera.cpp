@@ -14,14 +14,14 @@ UserCamera::~UserCamera()
 {
 }
 
-void UserCamera::moveAhead(float direction)
+void UserCamera::moveAhead(float amount)
 {
-	this->position = this->position - (this->forward() * direction);
+	this->position = this->position - (this->forward() * amount);
 }
 
-void UserCamera::moveSideways(float direction)
+void UserCamera::moveSideways(float amount)
 {
-	this->position = this->position - (this->right() * direction);
+	this->position = this->position - (this->right() * amount);
 }
 
 void UserCamera::pitch(float amount)
@@ -36,7 +36,6 @@ void UserCamera::yaw(float amount)
 
 glm::mat4 UserCamera::getProjectionViewMatrix()
 {
-	std::cout << (int)this->position.x << " " << (int)this->position.y << " " << (int)this->position.z << std::endl;
 	glm::mat4 view = glm::rotate(glm::mat4(1.0f), this->rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
 	view = glm::rotate(view, this->rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
 	view = glm::translate(view, this->position);
