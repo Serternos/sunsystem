@@ -76,16 +76,7 @@ void render()
 	SphereRenderer::render(sonne);
 	//RENDER HERE
 
-	// Buffer wechseln (double buffering, wegen GLUT_DOUBLE in der glutInitDisplayMode(..) Funktion)
 	glutSwapBuffers();
-}
-
-
-void keyboardFunction(unsigned char key, int mousex, int mousey)
-{
-}
-
-void keyboardUpFunction(unsigned char key, int mousex, int mousey){
 }
 
 /// <summary>
