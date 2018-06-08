@@ -26,16 +26,19 @@ void UserCamera::moveSideways(float amount)
 
 void UserCamera::pitch(float amount)
 {
-	this->rotation.x += amount;
+	this->rotation.x += glm::radians(amount);
+	if (this->rotation.x > glm::radians(89.0f)) this->rotation.x = glm::radians(89.0f);
+	else if (this->rotation.x < glm::radians(-89.0f)) this->rotation.x = glm::radians(-89.0f);
 }
 
 void UserCamera::yaw(float amount)
 {
-	this->rotation.y += amount;
+	this->rotation.y += glm::radians(amount);
 }
 
 glm::mat4 UserCamera::getProjectionViewMatrix()
 {
+	std::cout << "x: " << this->forward().x << " y: " << this->forward().y << " z: " << this->forward().z << std::endl;
 	glm::mat4 view = glm::rotate(glm::mat4(1.0f), this->rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
 	view = glm::rotate(view, this->rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
 	view = glm::translate(view, this->position);
@@ -46,6 +49,26 @@ glm::mat4 UserCamera::getProjectionViewMatrix()
 		this->farClippingPlane
 	);
 	return proj * view;
+}
+
+void UserCamera::update(float deltaTime)
+{
+	if (InputManager::getKey('a')) moveSideways(-moveSpeed * Time::deltaTime());
+	if (InputManager::getKey('d')) moveSideways(moveSpeed * Time::deltaTime());
+	if (InputManager::getKey('w')) moveAhead(moveSpeed * Time::deltaTime());
+	if (InputManager::getKey('s')) moveAhead(-moveSpeed * Time::deltaTime());
+
+	if (InputManager::getKey('r')) farClippingPlane += 5.0f;
+	if (InputManager::getKey('f')) farClippingPlane -= 5.0f;
+	if (InputManager::getKey('t')) nearClippingPlane += 0.5f;
+	if (InputManager::getKey('g')) nearClippingPlane -= 0.5f;
+
+	if (InputManager::getKey('+')) fieldOfView -= glm::radians(1.0f);
+	if (InputManager::getKey('-')) fieldOfView += glm::radians(1.0f);
+
+	glm::vec2 mouseD = InputManager::getMouseDeltas();
+	yaw(-mouseD.x);
+	pitch(-mouseD.y);
 }
 
 glm::vec3 UserCamera::right()

@@ -31,6 +31,8 @@ public:
 	///</summary>
 	glm::mat4 getModelMatrix();
 
+	void update(float deltaTime);
+
 private:
 	glm::vec3 rotation;	
 	glm::vec3 position;

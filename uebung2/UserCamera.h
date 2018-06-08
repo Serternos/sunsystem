@@ -6,6 +6,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
+#include "Time.h"
+#include "InputManager.h"
 
 class UserCamera
 {
@@ -13,10 +15,11 @@ public:
 	UserCamera();
 	~UserCamera();
 
-	float fieldOfView;
-	float nearClippingPlane;
-	float farClippingPlane;
-	float aspectRatio;
+	//projection parameters
+	float fieldOfView, nearClippingPlane, farClippingPlane, aspectRatio;
+
+	//translation speed in units/second
+	float moveSpeed;
 
 	void moveAhead(float amount);
 	void moveSideways(float amount);
@@ -25,6 +28,8 @@ public:
 	void yaw(float amount);
 
 	glm::mat4 getProjectionViewMatrix();
+
+	void update(float deltaTime);
 
 private:
 	glm::vec3 position;

@@ -5,8 +5,10 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "SphereRenderer.h"
+#include "InputManager.h"
 #include "shader.h"
 #include "Sphere.h"
+#include "Time.h"
 
 // Farblocation im Shader ( uniform )
 GLuint colorLocation, mvpLocation;
@@ -19,8 +21,9 @@ Sphere* erde;
 UserCamera* camera;
 
 // Breite und Höhe des Fensters
-const int width = 1024;
-const int height = 768;
+const int width = 800;
+const int height = 600;
+const float sensitivity = 60.0f;
 
 /// <summary>
 /// Initialisiert den Viewport, Shader und Vertexdaten
@@ -35,6 +38,7 @@ void init()
 	glDepthFunc(GL_LESS);
 
 	// Initialisiert den Standardshader aus shader.h
+	InputManager::init(width, height, sensitivity);
 	SphereRenderer::init(initShader());
 
 	//GENERATE SPHERE HERE
@@ -49,6 +53,8 @@ void init()
 	camera->nearClippingPlane = 1.0f;
 	camera->fieldOfView = glm::radians(29.0f);
 
+	camera->moveSpeed = 3.0f;
+
 	camera->moveAhead(-10.0f);
 
 	SphereRenderer::setCamera(camera);
@@ -60,7 +66,11 @@ void init()
 /// </summary>
 void render()
 {
-
+	//update
+	if (InputManager::getKey('q')) glutLeaveMainLoop();
+	Time::update();
+	camera->update(Time::deltaTime());
+	sonne->update(Time::deltaTime());
 
 	//RENDER HERE
 	SphereRenderer::render(sonne);
@@ -73,54 +83,9 @@ void render()
 
 void keyboardFunction(unsigned char key, int mousex, int mousey)
 {
-	switch (key) {
-		case 'a':
-			camera->moveSideways(-0.01f);
-			break;
-		case 'd':
-			camera->moveSideways(-0.01f);
-			break;
-		case 'w':
-			camera->moveAhead(0.01f);
-			break;
-		case 's':
-			camera->moveAhead(-0.01f);
-			break;
-		case 'r':
-			camera->farClippingPlane += 5.0f;
-			break;
-		case 'f':
-			camera->farClippingPlane -= 5.0f;
-			break;
-		case 't':
-			camera->nearClippingPlane += 0.5f;
-			break;
-		case 'g':
-			camera->nearClippingPlane -= 0.5f;
-			break;
-		case '+':
-			camera->fieldOfView -= glm::radians(1.0f);
-			break;
-		case '-':
-			camera->fieldOfView += glm::radians(1.0f);
-			break;
-		default:
-			break;
-	}
 }
 
-void passiveMotionFunction(int x, int y) {
-	static int lastMouseX = width / 2;
-	static int lastMouseY = height / 2;
-
-	int deltaX = lastMouseX - x;
-	int deltaY = lastMouseY - y;
-
-	lastMouseX = x;
-	lastMouseY = y;
-
-	camera->yaw((float)deltaX / 500.0f);
-	camera->pitch((float)deltaY / 500.0f);
+void keyboardUpFunction(unsigned char key, int mousex, int mousey){
 }
 
 /// <summary>
@@ -136,12 +101,13 @@ int main(int argc, char **argv)
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-	glutInitWindowPosition(250, 250);
+	glutInitWindowPosition(400, 250);
 	glutInitWindowSize(width, height);
 	glutCreateWindow("Aufgabe 03 - Computergrafik I");
 	glutDisplayFunc(render);
-	glutKeyboardFunc(keyboardFunction);
-	glutPassiveMotionFunc(passiveMotionFunction);
+	glutKeyboardFunc(InputManager::keyboardDownFunc);
+	glutKeyboardUpFunc(InputManager::keyboardUpFunc);
+	glutPassiveMotionFunc(InputManager::passiveMotionFunc);
 	glutIdleFunc(idleFunction);
 	glewInit();
 	init();
