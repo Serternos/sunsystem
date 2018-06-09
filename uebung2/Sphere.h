@@ -31,10 +31,11 @@ public:
 	///</summary>
 	glm::mat4 getModelMatrix();
 
-	void update(float deltaTime);
+	void update(float deltaTime, glm::vec3 translation);
 
 private:
-	glm::vec3 rotation;	
+	float rotation;
+	float orbitAngle;
 	glm::vec3 position;
 };
 

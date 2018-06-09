@@ -14,7 +14,6 @@ static GLuint shader;
 static GLfloat vertices[BUFFER_ARRAY_SIZE];
 static GLuint indices[INDICE_COUNT_OF_SPHERE];
 
-static glm::mat4 modelviewprojection;
 static UserCamera* camera;
 
 SphereRenderer::SphereRenderer()
@@ -33,13 +32,33 @@ void SphereRenderer::render(Sphere* sphere)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram(shader);
 	glm::mat4 projectionview = camera->getViewProjectionMatrix();
+	glm::mat4 model = glm::mat4(1.0f);
+
+	std::vector<Sphere*> spheresToRender = std::vector<Sphere*>();
+	spheresToRender.push_back(sphere);
 
 	// once per sphere per frame
-	modelviewprojection = projectionview * sphere->getModelMatrix();
+	while (spheresToRender.size() > 0) {
+		//get next sphere
+		Sphere* currentSphere = spheresToRender.at(spheresToRender.size() - 1);
+		spheresToRender.pop_back();
 
-	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(modelviewprojection));
-	glBindVertexArray(vao);
-	glDrawElements(GL_TRIANGLE_STRIP, sizeof(indices), GL_UNSIGNED_INT, 0);
+		//render it
+		model = currentSphere->getModelMatrix();
+		glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(projectionview * model));
+		glBindVertexArray(vao);
+		glDrawElements(GL_TRIANGLE_STRIP, sizeof(indices), GL_UNSIGNED_INT, 0);
+
+		//add all children of currentSphere to spheresToRender
+		spheresToRender.insert(
+			spheresToRender.end(),
+		    currentSphere->children.begin(),
+			currentSphere->children.end()
+		);
+	}
+
+
+
 	glBindVertexArray(0);
 }
 

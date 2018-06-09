@@ -15,7 +15,6 @@ GLuint colorLocation, mvpLocation;
 
 //Kugeln
 Sphere* sonne;
-Sphere* erde;
 
 //Kamera
 UserCamera* camera;
@@ -41,14 +40,19 @@ void init()
 	InputManager::init(width, height, sensitivity);
 	SphereRenderer::init(initShader());
 
-	//GENERATE SPHERE HERE
-	sonne = new Sphere(2.0f, 0.0f, 0.0f, 0.0f);
-	erde = new Sphere(1.0f, 0.0f, 0.0f, 0.0f);
-	//GENERATE SPHERE HERE
+	//GENERATE SPHERES HERE
+	sonne = new Sphere(2.0f, 1.0f, 0.0f, 0.0f);
+	Sphere* erde = new Sphere(0.3f, 33.0f, 4.0f, 23.6f);
+	Sphere* mars = new Sphere(0.2f, 13.0f, 8.0f, 3.0f);
+	Sphere* mond = new Sphere(0.1f, 30.0f, 0.6f, -30.0f);
+	sonne->children.push_back(erde);
+	sonne->children.push_back(mars);
+	erde->children.push_back(mond);
+	//GENERATE SPHERES HERE
 
 	//GENERATE CAMERA HERE
 	camera = new UserCamera();
-	camera->aspectRatio = ((float)width /(float) height);
+	camera->aspectRatio = ((float)width/(float) height);
 	camera->farClippingPlane = 100.0f;
 	camera->nearClippingPlane = 1.0f;
 	camera->fieldOfView = glm::radians(29.0f);
@@ -70,7 +74,7 @@ void render()
 	if (InputManager::getKey('q')) glutLeaveMainLoop();
 	Time::update();
 	camera->update(Time::deltaTime());
-	sonne->update(Time::deltaTime());
+	sonne->update(Time::deltaTime(), glm::vec3(0.0f));
 
 	//RENDER HERE
 	SphereRenderer::render(sonne);
