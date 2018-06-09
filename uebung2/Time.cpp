@@ -19,6 +19,7 @@ void Time::update() {
 	std::chrono::time_point<std::chrono::high_resolution_clock> now = std::chrono::high_resolution_clock::now();
 	auto microseconds = std::chrono::duration_cast<std::chrono::microseconds>(now - lastNow);
 	deltaTimeValue = ((float)microseconds.count()) / 1'000'000.0f;
+	deltaTimeValue = (deltaTimeValue < 0.0f) ? 0 : deltaTimeValue;
 	updatesSinceLastSecond++;
 
 	timeSinceLastSecond += deltaTimeValue;

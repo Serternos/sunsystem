@@ -25,6 +25,10 @@ void InputManager::init(int width, int height, float sensitivity)
 	glutWarpPointer(halfWidth, halfHeight);
 }
 
+void InputManager::update() {
+	mouseDeltas = glm::vec2(0.0f, 0.0f);
+}
+
 void InputManager::keyboardDownFunc(unsigned char key, int mousex, int mousey)
 {
 	keyField[key] = true;
@@ -52,7 +56,6 @@ void InputManager::passiveMotionFunc(int x, int y)
 glm::vec2 InputManager::getMouseDeltas()
 {
 	glm::vec2 ret = mouseDeltas;
-	mouseDeltas = glm::vec2(0.0f, 0.0f);
 	return ret * mouseScale;
 }
 

@@ -21,8 +21,8 @@ Sphere* erde;
 UserCamera* camera;
 
 // Breite und Höhe des Fensters
-const int width = 800;
-const int height = 600;
+const int width = 1024;
+const int height = 768;
 const float sensitivity = 60.0f;
 
 /// <summary>
@@ -77,6 +77,7 @@ void render()
 	//RENDER HERE
 
 	glutSwapBuffers();
+	InputManager::update();
 }
 
 /// <summary>

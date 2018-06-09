@@ -14,6 +14,8 @@ public:
 
 	static void init(int newWidth, int newHeight, float sensitivity);
 
+	static void update();
+
 	static void keyboardDownFunc(unsigned char key, int mousex, int mousey);
 	static void keyboardUpFunc(unsigned char key, int mousex, int mousey);
 	static void passiveMotionFunc(int x, int y);

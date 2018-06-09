@@ -32,10 +32,10 @@ void SphereRenderer::render(Sphere* sphere)
 	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram(shader);
-	glm::mat4 viewprojection = camera->getProjectionViewMatrix();
+	glm::mat4 projectionview = camera->getViewProjectionMatrix();
 
 	// once per sphere per frame
-	modelviewprojection = viewprojection * sphere->getModelMatrix();
+	modelviewprojection = projectionview * sphere->getModelMatrix();
 
 	glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(modelviewprojection));
 	glBindVertexArray(vao);
