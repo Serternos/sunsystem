@@ -7,8 +7,8 @@
 #include <fstream>
 #include <ctype.h>
 
-std::string vertexFileName = "vertex.shader";
-std::string fragmentFileName = "fragment.shader";
+std::string vertexFileName = "res/vertex.shader";
+std::string fragmentFileName = "res/fragment.shader";
 
 GLchar* readShaderFile(std::string fileName);
 

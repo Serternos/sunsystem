@@ -27,7 +27,8 @@ public:
 	void pitch( float amount);
 	void yaw(float amount);
 
-	glm::mat4 getViewProjectionMatrix();
+	glm::mat4 getViewMatrix();
+	glm::mat4 getProjectionMatrix();
 
 	void update(float deltaTime);
 

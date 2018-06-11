@@ -36,20 +36,26 @@ void UserCamera::yaw(float amount)
 	this->rotation.y += glm::radians(amount);
 }
 
-glm::mat4 UserCamera::getViewProjectionMatrix()
+glm::mat4 UserCamera::getProjectionMatrix()
 {
-	glm::mat4 view = glm::mat4(1.0f);
-	view = glm::rotate(view, -(this->rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-	view = glm::rotate(view, -(this->rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	view = glm::translate(view, -(this->position));
-
 	glm::mat4 proj = glm::perspective(
 		this->fieldOfView,
 		this->aspectRatio,
 		this->nearClippingPlane, 
 		this->farClippingPlane
 	);
-	return proj * view;
+
+	return proj;
+}
+
+glm::mat4 UserCamera::getViewMatrix()
+{
+	glm::mat4 view = glm::mat4(1.0f);
+	view = glm::rotate(view, -(this->rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	view = glm::rotate(view, -(this->rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	view = glm::translate(view, -(this->position));
+
+	return view;
 }
 
 void UserCamera::update(float deltaTime)

@@ -10,9 +10,6 @@
 #include "Sphere.h"
 #include "Time.h"
 
-// Farblocation im Shader ( uniform )
-GLuint colorLocation, mvpLocation;
-
 //Kugeln
 Sphere* sonne;
 
@@ -42,12 +39,27 @@ void init()
 
 	//GENERATE SPHERES HERE
 	sonne = new Sphere(2.0f, 1.0f, 0.0f, 0.0f);
-	Sphere* erde = new Sphere(0.3f, 33.0f, 4.0f, 23.6f);
+	Sphere* erde = new Sphere(0.3f, 33.0f, 4.0f, 8.6f);
 	Sphere* mars = new Sphere(0.2f, 13.0f, 8.0f, 3.0f);
 	Sphere* mond = new Sphere(0.1f, 30.0f, 0.6f, -30.0f);
 	sonne->children.push_back(erde);
 	sonne->children.push_back(mars);
 	erde->children.push_back(mond);
+
+	sonne->mat.diffuse = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
+	sonne->mat.emissive = glm::vec4(1.0f, 1.0f, 0.5f, 1.0f);
+
+	erde->mat.diffuse = glm::vec4(0.0f, 0.2f, 1.0f, 1.0f);
+	erde->mat.specular = glm::vec4(1.0f);
+	erde->mat.smoothness = 12.0f;
+
+	mars->mat.diffuse = glm::vec4(1.0f, 0.3f, 0.3f, 1.0f);
+	mars->mat.specular = glm::vec4(0.0f);
+	mars->mat.smoothness = 0.0f;
+
+	mond->mat.diffuse = glm::vec4(0.4f, 0.4f, 0.4f, 1.0f);
+	mond->mat.specular = glm::vec4(0.0f);
+	mond->mat.smoothness = 0.0f;
 	//GENERATE SPHERES HERE
 
 	//GENERATE CAMERA HERE

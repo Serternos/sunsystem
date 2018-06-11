@@ -8,8 +8,16 @@ static const int sectors = 16;
 static GLuint vao;
 static GLuint ibo;
 static GLuint interleavedVbo;
-static GLuint mvpLocation;
 static GLuint shader;
+
+//uniform matrix locations
+static GLuint mvpLocation, mvLocation, vLocation, nLocation;
+
+//uniform light locations
+static GLuint light_position, light_ambient, light_diffuse, light_specular;
+
+//uniform material locations
+static GLuint mat_diffuse, mat_specular, mat_emissive, mat_smoothness;
 
 static GLfloat vertices[BUFFER_ARRAY_SIZE];
 static GLuint indices[INDICE_COUNT_OF_SPHERE];
@@ -27,12 +35,19 @@ SphereRenderer::~SphereRenderer()
 
 void SphereRenderer::render(Sphere* sphere)
 {
-	// once per frame
+	// once per frame		
+	glBindVertexArray(vao);
 	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram(shader);
-	glm::mat4 projectionview = camera->getViewProjectionMatrix();
-	glm::mat4 model = glm::mat4(1.0f);
+	glm::mat4 P = camera->getProjectionMatrix();
+	glm::mat4 V = camera->getViewMatrix();
+	glm::mat4 M = glm::mat4(1.0f);
+
+	glm::mat4 VP = P * V;
+	glm::mat4 MV = glm::mat4(1.0f);
+
+	glUniformMatrix4fv(vLocation, 1, GL_FALSE, glm::value_ptr(V));
 
 	std::vector<Sphere*> spheresToRender = std::vector<Sphere*>();
 	spheresToRender.push_back(sphere);
@@ -43,10 +58,20 @@ void SphereRenderer::render(Sphere* sphere)
 		Sphere* currentSphere = spheresToRender.at(spheresToRender.size() - 1);
 		spheresToRender.pop_back();
 
+		//set material uniforms
+		M = currentSphere->getModelMatrix();
+		MV = V*M;
+
+		glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(VP * M));
+		glUniformMatrix4fv(mvLocation, 1, GL_FALSE, glm::value_ptr(MV));
+		glUniformMatrix3fv(nLocation, 1, GL_FALSE, glm::value_ptr(glm::mat3(MV)));
+
+		glUniform4fv(mat_diffuse, 1, glm::value_ptr(currentSphere->mat.diffuse));
+		glUniform4fv(mat_specular, 1, glm::value_ptr(currentSphere->mat.specular));
+		glUniform4fv(mat_emissive, 1, glm::value_ptr(currentSphere->mat.emissive));
+		glUniform1f(mat_smoothness, currentSphere->mat.smoothness);
+	
 		//render it
-		model = currentSphere->getModelMatrix();
-		glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(projectionview * model));
-		glBindVertexArray(vao);
 		glDrawElements(GL_TRIANGLE_STRIP, sizeof(indices), GL_UNSIGNED_INT, 0);
 
 		//add all children of currentSphere to spheresToRender
@@ -56,8 +81,6 @@ void SphereRenderer::render(Sphere* sphere)
 			currentSphere->children.end()
 		);
 	}
-
-
 
 	glBindVertexArray(0);
 }
@@ -118,7 +141,28 @@ void SphereRenderer::init(GLuint shaderProgram)
 {
 	std::cout << "Initializing SphereRenderer" << std::endl;
 	shader = shaderProgram;
-	mvpLocation = glGetUniformLocation(shaderProgram, "MVP");
+	glUseProgram(shader);
+
+	mvpLocation = glGetUniformLocation(shader, "MVP");
+	mvLocation = glGetUniformLocation(shader, "MV");
+	vLocation = glGetUniformLocation(shader, "V");
+	nLocation = glGetUniformLocation(shader, "N");
+
+	light_position = glGetUniformLocation(shader, "light_position");
+	light_ambient = glGetUniformLocation(shader, "light_ambient");
+	light_diffuse = glGetUniformLocation(shader, "light_diffuse");
+	light_specular = glGetUniformLocation(shader, "light_specular");
+
+	mat_diffuse = glGetUniformLocation(shader, "mat_diffuse");
+	mat_specular = glGetUniformLocation(shader, "mat_specular");
+	mat_emissive = glGetUniformLocation(shader, "mat_emissive");
+	mat_smoothness = glGetUniformLocation(shader, "mat_smoothness");
+
+	glUniform4fv(light_position, 1, glm::value_ptr(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)));
+	glUniform4fv(light_ambient, 1, glm::value_ptr(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f)));
+	glUniform4fv(light_diffuse, 1, glm::value_ptr(glm::vec4(1.0f, 1.0f, 0.5f, 1.0f)));
+	glUniform4fv(light_specular, 1, glm::value_ptr(glm::vec4(1.0f, 1.0f, 0.5f, 1.0f)));
+
 	fillSphereArray(vertices, indices);
 	generateBuffers();
 }
@@ -144,6 +188,7 @@ void SphereRenderer::generateBuffers()
 	//verts und farben laden
 	glBindBuffer(GL_ARRAY_BUFFER, interleavedVbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
 	//position
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (8 * sizeof(GL_FLOAT)), (GLvoid*)0);

@@ -7,6 +7,11 @@
 
 #include <vector>
 
+struct Material {
+	glm::vec4 emissive, diffuse, specular;
+	float smoothness;
+};
+
 class Sphere
 {
 public:
@@ -20,11 +25,10 @@ public:
 	Sphere(float sphereRadius, float rotationFreq, float orbitRadius, float orbitFreq);
 	~Sphere();
 
-	//PLUS TEXTURE-->LATER
 	float sphereRadius, rotationSpeed, orbitRadius, orbitSpeed;
 	std::vector<Sphere*> children;
-	glm::vec4 color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
+	Material mat;
 
 	///<summary>
 	/// get the model matrix for this sphere
