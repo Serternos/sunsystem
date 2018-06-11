@@ -17,7 +17,7 @@ static GLuint mvpLocation, mvLocation, vLocation, nLocation;
 static GLuint light_position, light_ambient, light_diffuse, light_specular;
 
 //uniform material locations
-static GLuint mat_diffuse, mat_specular, mat_emissive, mat_smoothness;
+static GLuint mat_diffuse, mat_specular, mat_emissive, mat_smoothness, mat_texture;
 
 static GLfloat vertices[BUFFER_ARRAY_SIZE];
 static GLuint indices[INDICE_COUNT_OF_SPHERE];
@@ -64,12 +64,15 @@ void SphereRenderer::render(Sphere* sphere)
 
 		glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(VP * M));
 		glUniformMatrix4fv(mvLocation, 1, GL_FALSE, glm::value_ptr(MV));
-		glUniformMatrix3fv(nLocation, 1, GL_FALSE, glm::value_ptr(glm::mat3(MV)));
 
 		glUniform4fv(mat_diffuse, 1, glm::value_ptr(currentSphere->mat.diffuse));
 		glUniform4fv(mat_specular, 1, glm::value_ptr(currentSphere->mat.specular));
 		glUniform4fv(mat_emissive, 1, glm::value_ptr(currentSphere->mat.emissive));
 		glUniform1f(mat_smoothness, currentSphere->mat.smoothness);
+
+		glUniform1i(mat_texture, 0);
+		glActiveTexture(GL_TEXTURE0 + 0);
+		glBindTexture(GL_TEXTURE_2D, currentSphere->mat.texture);
 	
 		//render it
 		glDrawElements(GL_TRIANGLE_STRIP, sizeof(indices), GL_UNSIGNED_INT, 0);
@@ -146,7 +149,6 @@ void SphereRenderer::init(GLuint shaderProgram)
 	mvpLocation = glGetUniformLocation(shader, "MVP");
 	mvLocation = glGetUniformLocation(shader, "MV");
 	vLocation = glGetUniformLocation(shader, "V");
-	nLocation = glGetUniformLocation(shader, "N");
 
 	light_position = glGetUniformLocation(shader, "light_position");
 	light_ambient = glGetUniformLocation(shader, "light_ambient");
@@ -157,6 +159,7 @@ void SphereRenderer::init(GLuint shaderProgram)
 	mat_specular = glGetUniformLocation(shader, "mat_specular");
 	mat_emissive = glGetUniformLocation(shader, "mat_emissive");
 	mat_smoothness = glGetUniformLocation(shader, "mat_smoothness");
+	mat_texture = glGetUniformLocation(shader, "mat_texture");
 
 	glUniform4fv(light_position, 1, glm::value_ptr(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)));
 	glUniform4fv(light_ambient, 1, glm::value_ptr(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f)));
