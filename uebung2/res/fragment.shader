@@ -31,7 +31,7 @@ void main()
 	vec4 specular = vec4(0.0f, 0.0f, 0.0f, 1.0f);
 	if (diffuse_intensity > 0.0f) {
 		float specular_intensity = pow(max(dot(H, normal), 0.0f), mat_smoothness);
-		specular = specular_intensity * light_specular * mat_specular;
+		specular = specular_intensity * light_specular * mat_specular * atan(mat_smoothness / 10.0f) * 0.5f;
 	}
 
 	fragColor = (mat_emissive + ambient + diffuse) * tex_color + specular;

@@ -40,11 +40,11 @@ void init()
 	SphereRenderer::init(initShader());
 
 	//GENERATE SPHERES HERE
-	sonne = new Sphere(2.0f, 1.0f, 0.0f, 0.0f);
-	Sphere* erde = new Sphere(0.3f, 33.0f, 4.0f, 8.6f);
-	Sphere* mars = new Sphere(0.2f, 13.0f, 8.0f, 3.0f);
+	sonne = new Sphere(2.0f, 0.3f, 0.0f, 0.0f);
+	Sphere* erde = new Sphere(0.3f, 8.0f, 4.0f, 2.6f);
+	Sphere* mars = new Sphere(0.2f, 7.0f, 8.0f, 1.5f);
 	Sphere* mond = new Sphere(0.1f, 30.0f, 0.6f, -30.0f);
-	Sphere* jupiter = new Sphere(1.0f, 1.0f, 12.0f, 1.2f);
+	Sphere* jupiter = new Sphere(1.0f, 5.0f, 12.0f, 1.0f);
 	sonne->children.push_back(erde);
 	sonne->children.push_back(mars);
 	sonne->children.push_back(jupiter);
@@ -57,19 +57,19 @@ void init()
 	erde->mat.diffuse = glm::vec4(0.5f, 0.4f, 1.0f, 1.0f);
 	erde->mat.specular = glm::vec4(1.0f);
 	erde->mat.texture = load_texture("res/earth.jpg");
-	erde->mat.smoothness = 12.0f;
+	erde->mat.smoothness = 50.0f;
 
-	mars->mat.diffuse = glm::vec4(1.0f, 0.3f, 0.3f, 1.0f);
+	mars->mat.diffuse = glm::vec4(1.0f, 0.7f, 0.7f, 1.0f);
 	mars->mat.specular = glm::vec4(0.0f);
 	mars->mat.texture = load_texture("res/mars.jpg");
-	mars->mat.smoothness = 0.0f;
+	mars->mat.smoothness = 1.0f;
 
 	jupiter->mat.diffuse = glm::vec4(1.0f, 0.8f, 0.8f, 1.0f);
-	jupiter->mat.specular = glm::vec4(0.0f);
+	jupiter->mat.specular = glm::vec4(1.0f, 0.9f, 0.9f, 1.0f);
 	jupiter->mat.texture = load_texture("res/jupiter.jpg");
-	jupiter->mat.smoothness = 15.0f;
+	jupiter->mat.smoothness = 7.0f;
 
-	mond->mat.diffuse = glm::vec4(0.4f, 0.4f, 0.4f, 1.0f);
+	mond->mat.diffuse = glm::vec4(0.7f, 0.7f, 0.7f, 1.0f);
 	mond->mat.specular = glm::vec4(0.0f);
 	mond->mat.texture = load_texture("res/moon.jpg");
 	mond->mat.smoothness = 0.0f;
