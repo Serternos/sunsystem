@@ -10,7 +10,7 @@
 
 struct Material {
 	glm::vec4 emissive, diffuse, specular;
-	GLuint texture;
+	GLuint tex_diffuse, tex_emission;
 	float smoothness;
 };
 
@@ -27,9 +27,9 @@ public:
 	Sphere(float sphereRadius, float rotationFreq, float orbitRadius, float orbitFreq);
 	~Sphere();
 
-	float sphereRadius, rotationSpeed, orbitRadius, orbitSpeed;
+	float sphereRadius, rotationSpeed, orbitRadius, orbitSpeed, atmosphereSpeed;
 	std::vector<Sphere*> children;
-
+	Sphere* atmosphere;
 	Material mat;
 
 	///<summary>

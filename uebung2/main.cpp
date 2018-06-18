@@ -11,6 +11,10 @@
 #include "Sphere.h"
 #include "Time.h"
 
+#define COLOR_WHITE glm::vec4(1.0f)
+#define COLOR_BLACK glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)
+#define COLOR_TRANSPARENT glm::vec4(0.0f)
+
 //Kugeln
 Sphere* sonne;
 
@@ -35,43 +39,75 @@ void init()
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	// Initialisiert den Standardshader aus shader.h
 	InputManager::init(width, height, sensitivity);
 	SphereRenderer::init(initShader());
 
 	//GENERATE SPHERES HERE
+	GLuint black_tex = load_texture("res/black.jpg");
+	GLuint white_tex = load_texture("res/white.jpg");
+
 	sonne = new Sphere(2.0f, 0.3f, 0.0f, 0.0f);
-	Sphere* erde = new Sphere(0.3f, 8.0f, 4.0f, 2.6f);
-	Sphere* mars = new Sphere(0.2f, 7.0f, 8.0f, 1.5f);
-	Sphere* mond = new Sphere(0.1f, 30.0f, 0.6f, -30.0f);
-	Sphere* jupiter = new Sphere(1.0f, 5.0f, 12.0f, 1.0f);
+
+	Sphere* erde = new Sphere(0.3f, 8.0f, 4.0f, 1.5f);
+	Sphere* erde_atm = new Sphere(0.31f, 9.0f, 0.0f, 0.0f);
+	Sphere* mars = new Sphere(0.2f, 7.0f, 8.0f, 1.0f);
+	Sphere* mond = new Sphere(0.1f, 30.0f, 0.6f, -25.0f);
+	Sphere* jupiter = new Sphere(1.0f, 5.0f, 12.0f, 0.6f);
+	Sphere* jupiter_atm = new Sphere(1.03f, 4.0f, 0.0f, 0.0f);
+
 	sonne->children.push_back(erde);
 	sonne->children.push_back(mars);
 	sonne->children.push_back(jupiter);
 	erde->children.push_back(mond);
+	erde->children.push_back(erde_atm);
+	jupiter->children.push_back(jupiter_atm);
 
-	sonne->mat.diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	sonne->mat.diffuse = COLOR_WHITE;
 	sonne->mat.emissive = glm::vec4(1.0f, 1.0f, 0.5f, 1.0f);
-	sonne->mat.texture = load_texture("res/sun.jpg");
+	sonne->mat.tex_diffuse = load_texture("res/sun.jpg");
+	sonne->mat.tex_emission = white_tex;
 
 	erde->mat.diffuse = glm::vec4(0.5f, 0.4f, 1.0f, 1.0f);
-	erde->mat.specular = glm::vec4(1.0f);
-	erde->mat.texture = load_texture("res/earth.jpg");
+	erde->mat.specular = COLOR_WHITE;
+	erde->mat.emissive = COLOR_WHITE;
+	erde->mat.tex_diffuse = load_texture("res/earth_diffuse.jpg");
+	erde->mat.tex_emission = load_texture("res/earth_emission.jpg");
 	erde->mat.smoothness = 50.0f;
 
+	erde_atm->mat.diffuse = COLOR_WHITE;
+	erde_atm->mat.specular = COLOR_WHITE;
+	erde_atm->mat.emissive = COLOR_BLACK;
+	erde_atm->mat.tex_diffuse = load_texture("res/earth_clouds.png");
+	erde_atm->mat.tex_emission = black_tex;
+	erde_atm->mat.smoothness = 25.0f;
+
 	mars->mat.diffuse = glm::vec4(1.0f, 0.7f, 0.7f, 1.0f);
-	mars->mat.specular = glm::vec4(0.0f);
-	mars->mat.texture = load_texture("res/mars.jpg");
+	mars->mat.specular = COLOR_TRANSPARENT;
+	mars->mat.tex_diffuse = load_texture("res/mars.jpg");
+	mars->mat.tex_emission = black_tex;
 	mars->mat.smoothness = 1.0f;
 
 	jupiter->mat.diffuse = glm::vec4(1.0f, 0.8f, 0.8f, 1.0f);
 	jupiter->mat.specular = glm::vec4(1.0f, 0.9f, 0.9f, 1.0f);
-	jupiter->mat.texture = load_texture("res/jupiter.jpg");
+	jupiter->mat.tex_diffuse = load_texture("res/jupiter.jpg");
+	jupiter->mat.tex_emission = black_tex;
 	jupiter->mat.smoothness = 7.0f;
+	
+	jupiter_atm->mat.diffuse = COLOR_WHITE;
+	jupiter_atm->mat.specular = COLOR_WHITE;
+	jupiter_atm->mat.emissive = COLOR_BLACK;
+	jupiter_atm->mat.tex_diffuse = load_texture("res/jupiter_clouds.png");
+	jupiter_atm->mat.tex_emission = black_tex;
+	jupiter_atm->mat.smoothness = 0.0f;
 
 	mond->mat.diffuse = glm::vec4(0.7f, 0.7f, 0.7f, 1.0f);
-	mond->mat.specular = glm::vec4(0.0f);
-	mond->mat.texture = load_texture("res/moon.jpg");
+	mond->mat.specular = COLOR_TRANSPARENT;
+	mond->mat.tex_diffuse = load_texture("res/moon.jpg");
+	mond->mat.tex_emission = black_tex;
 	mond->mat.smoothness = 0.0f;
 	//GENERATE SPHERES HERE
 

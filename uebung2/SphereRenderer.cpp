@@ -17,7 +17,8 @@ static GLuint mvpLocation, mvLocation, vLocation, nLocation;
 static GLuint light_position, light_ambient, light_diffuse, light_specular;
 
 //uniform material locations
-static GLuint mat_diffuse, mat_specular, mat_emissive, mat_smoothness, mat_texture;
+static GLuint mat_diffuse, mat_specular, mat_emissive, mat_smoothness;
+static GLuint tex_diffuse, tex_emission;
 
 static GLfloat vertices[BUFFER_ARRAY_SIZE];
 static GLuint indices[INDICE_COUNT_OF_SPHERE];
@@ -70,9 +71,15 @@ void SphereRenderer::render(Sphere* sphere)
 		glUniform4fv(mat_emissive, 1, glm::value_ptr(currentSphere->mat.emissive));
 		glUniform1f(mat_smoothness, currentSphere->mat.smoothness);
 
-		glUniform1i(mat_texture, 0);
+		glUniform1i(tex_diffuse, 0); //texture unit 0
 		glActiveTexture(GL_TEXTURE0 + 0);
-		glBindTexture(GL_TEXTURE_2D, currentSphere->mat.texture);
+		glBindTexture(GL_TEXTURE_2D, currentSphere->mat.tex_diffuse);
+
+		glUniform1i(tex_emission, 1);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, currentSphere->mat.tex_emission);
+
+
 	
 		//render it
 		glDrawElements(GL_TRIANGLE_STRIP, sizeof(indices), GL_UNSIGNED_INT, 0);
@@ -159,7 +166,8 @@ void SphereRenderer::init(GLuint shaderProgram)
 	mat_specular = glGetUniformLocation(shader, "mat_specular");
 	mat_emissive = glGetUniformLocation(shader, "mat_emissive");
 	mat_smoothness = glGetUniformLocation(shader, "mat_smoothness");
-	mat_texture = glGetUniformLocation(shader, "mat_texture");
+	tex_diffuse = glGetUniformLocation(shader, "tex_diffuse");
+	tex_emission = glGetUniformLocation(shader, "tex_emission");
 
 	glUniform4fv(light_position, 1, glm::value_ptr(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)));
 	glUniform4fv(light_ambient, 1, glm::value_ptr(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f)));
