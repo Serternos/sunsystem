@@ -29,7 +29,6 @@ public:
 
 	float sphereRadius, rotationSpeed, orbitRadius, orbitSpeed, atmosphereSpeed;
 	std::vector<Sphere*> children;
-	Sphere* atmosphere;
 	Material mat;
 
 	///<summary>
